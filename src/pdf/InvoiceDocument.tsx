@@ -1,5 +1,6 @@
 import { Document, Page, Text, View, StyleSheet, Font, Image } from "@react-pdf/renderer";
 import path from "path";
+import { formatDate } from "@/lib/format";
 
 Font.register({
   family: "Roboto",
@@ -46,7 +47,7 @@ export function InvoiceDocument({ shop, invoice, items }: { shop: Shop; invoice:
           <View>
             <Text style={s.title}>HÓA ĐƠN</Text>
             <Text style={s.muted}>{invoice.invoiceNumber}</Text>
-            <Text style={s.muted}>{invoice.createdAt}</Text>
+            <Text style={s.muted}>{formatDate(invoice.createdAt)}</Text>
           </View>
         </View>
 

@@ -23,32 +23,39 @@ export async function POST(req: Request) {
     tipAmount: data.tipAmount,
   });
 
-  const invoiceNumber = await generateInvoiceNumber();
+  // Sinh số + insert invoice + insert items trong 1 transaction:
+  // nếu insert items lỗi thì invoice cũng rollback (không còn hóa đơn rỗng ở DB),
+  // và số hóa đơn sinh trong cùng tx để giảm race trùng mã.
+  const invoice = await db.transaction(async (tx) => {
+    const invoiceNumber = await generateInvoiceNumber(tx);
 
-  const [invoice] = await db.insert(invoices).values({
-    invoiceNumber,
-    customerName: data.customerName,
-    customerPhone: data.customerPhone,
-    subtotal: calc.subtotal,
-    discountType: data.discountType,
-    discountValue: data.discountValue,
-    discountAmount: calc.discountAmount,
-    taxRate: data.taxRate,
-    taxAmount: calc.taxAmount,
-    tipAmount: data.tipAmount,
-    total: calc.total,
-    note: data.note,
-  }).returning();
+    const [created] = await tx.insert(invoices).values({
+      invoiceNumber,
+      customerName: data.customerName,
+      customerPhone: data.customerPhone,
+      subtotal: calc.subtotal,
+      discountType: data.discountType,
+      discountValue: data.discountValue,
+      discountAmount: calc.discountAmount,
+      taxRate: data.taxRate,
+      taxAmount: calc.taxAmount,
+      tipAmount: data.tipAmount,
+      total: calc.total,
+      note: data.note,
+    }).returning();
 
-  await db.insert(invoiceItems).values(
-    data.items.map((i) => ({
-      invoiceId: invoice.id,
-      serviceId: i.serviceId,
-      nameSnapshot: i.nameSnapshot,
-      priceSnapshot: i.priceSnapshot,
-      qty: i.qty,
-    }))
-  );
+    await tx.insert(invoiceItems).values(
+      data.items.map((i) => ({
+        invoiceId: created.id,
+        serviceId: i.serviceId,
+        nameSnapshot: i.nameSnapshot,
+        priceSnapshot: i.priceSnapshot,
+        qty: i.qty,
+      }))
+    );
+
+    return created;
+  });
 
   return NextResponse.json(invoice, { status: 201 });
 }
