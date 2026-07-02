@@ -39,7 +39,7 @@ export async function POST(req: Request) {
     sameSite: "lax",
     path: "/",
     maxAge,
-    secure: process.env.NODE_ENV === "production",
+    secure: req.url.startsWith("https://"),
   });
   return res;
 }

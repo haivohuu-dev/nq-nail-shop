@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "node scripts/print-ip.js",
     "build": "next build",
     "start": "next start",
     "db:push": "drizzle-kit push",
@@ -16,6 +16,7 @@
     "@react-pdf/renderer": "^4.5.1",
     "drizzle-orm": "^0.45.2",
     "next": "16.2.9",
+    "qrcode": "^1.5.4",
     "react": "19.2.4",
     "react-dom": "19.2.4",
     "zod": "^4.4.3"
@@ -24,8 +25,10 @@
     "@svgr/webpack": "^8.1.0",
     "@tailwindcss/postcss": "^4",
     "@types/node": "^20",
+    "@types/qrcode": "^1.5.6",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "dotenv": "^17.4.2",
     "drizzle-kit": "^0.31.10",
     "tailwindcss": "^4",
     "typescript": "^5"

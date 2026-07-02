@@ -1,6 +1,8 @@
 // Seed dữ liệu mẫu tiếng Việt cho tiệm nail.
 // Chạy: npm run db:seed  (đọc file UTF-8 nên tiếng Việt không bị hỏng encoding)
 import { createClient } from "@libsql/client";
+import { config } from "dotenv";
+config({ path: ".env.local" });
 
 const url = process.env.TURSO_DATABASE_URL || "file:local.db";
 const authToken = process.env.TURSO_AUTH_TOKEN || undefined;

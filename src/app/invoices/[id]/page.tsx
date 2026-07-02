@@ -56,7 +56,7 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
                     <th className="px-4 py-3 text-center text-theme-xs font-medium text-gray-700 dark:text-gray-400 w-10">#</th>
                     <th className="px-4 py-3 text-left text-theme-xs font-medium text-gray-700 dark:text-gray-400">Dịch vụ</th>
                     <th className="px-4 py-3 text-center text-theme-xs font-medium text-gray-700 dark:text-gray-400">SL</th>
-                    <th className="px-4 py-3 text-right text-theme-xs font-medium text-gray-700 dark:text-gray-400">Thành tiền</th>
+                    <th className="px-4 py-3 text-right text-theme-xs font-medium text-gray-700 dark:text-gray-400">Thành tiền (VNĐ)</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
@@ -73,11 +73,11 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
             </div>
 
             <div className="ml-auto w-full max-w-xs space-y-2 text-sm">
-              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Tạm tính</span><span>{formatVND(data.invoice.subtotal)}</span></div>
-              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Giảm giá</span><span>-{formatVND(data.invoice.discountAmount)}</span></div>
-              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Thuế</span><span>{formatVND(data.invoice.taxAmount)}</span></div>
-              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Tip</span><span>{formatVND(data.invoice.tipAmount)}</span></div>
-              <div className="flex justify-between border-t border-gray-200 pt-2 text-lg font-bold text-gray-800 dark:border-gray-800 dark:text-white/90"><span>Tổng</span><span>{formatVND(data.invoice.total)}</span></div>
+              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Tạm tính (VNĐ)</span><span>{formatVND(data.invoice.subtotal)}</span></div>
+              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Giảm giá (VNĐ)</span><span>-{formatVND(data.invoice.discountAmount)}</span></div>
+              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Thuế (VNĐ)</span><span>{formatVND(data.invoice.taxAmount)}</span></div>
+              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Tip (VNĐ)</span><span>{formatVND(data.invoice.tipAmount)}</span></div>
+              <div className="flex justify-between border-t border-gray-200 pt-2 text-lg font-bold text-gray-800 dark:border-gray-800 dark:text-white/90"><span>Tổng (VNĐ)</span><span>{formatVND(data.invoice.total)}</span></div>
             </div>
 
             {data.invoice.note && (

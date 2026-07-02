@@ -1,6 +1,8 @@
 // Tạo bảng users + sessions và seed 1 tài khoản admin.
 // Chạy: npm run db:auth
 import { createClient } from "@libsql/client";
+import { config } from "dotenv";
+config({ path: ".env.local" });
 import { scryptSync, randomBytes } from "crypto";
 
 const url = process.env.TURSO_DATABASE_URL || "file:local.db";

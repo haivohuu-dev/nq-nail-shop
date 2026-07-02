@@ -10,7 +10,7 @@ Font.register({
   ],
 });
 
-const vnd = (n: number) => new Intl.NumberFormat("vi-VN").format(Math.round(n)) + " ₫";
+const vnd = (n: number) => new Intl.NumberFormat("vi-VN").format(Math.round(n));
 
 const s = StyleSheet.create({
   page: { fontFamily: "Roboto", fontSize: 11, padding: 32, color: "#111" },
@@ -31,6 +31,7 @@ const s = StyleSheet.create({
 type Shop = {
   shopName: string; address: string; phone: string; logo: string | null;
   showDiscount?: boolean; showTax?: boolean; showTip?: boolean; showLogo?: boolean;
+  finalQrImage?: string | null;
 };
 type Invoice = {
   invoiceNumber: string; customerName: string; customerPhone: string; createdAt: string;
@@ -62,7 +63,7 @@ export function InvoiceDocument({ shop, invoice, items }: { shop: Shop; invoice:
           <View style={s.th}>
             <Text style={s.numCol}>#</Text>
             <Text style={s.nameCol}>Dịch vụ</Text>
-            <Text>Thành tiền</Text>
+            <Text>Thành tiền (VNĐ)</Text>
           </View>
           {items.map((it, i) => (
             <View style={s.row} key={i}>
@@ -74,21 +75,30 @@ export function InvoiceDocument({ shop, invoice, items }: { shop: Shop; invoice:
         </View>
 
         <View style={s.totals}>
-          <View style={s.totalRow}><Text>Tạm tính</Text><Text>{vnd(invoice.subtotal)}</Text></View>
+          <View style={s.totalRow}><Text>Tạm tính (VNĐ)</Text><Text>{vnd(invoice.subtotal)}</Text></View>
           {shop.showDiscount !== false ? (
-            <View style={s.totalRow}><Text>Giảm giá</Text><Text>-{vnd(invoice.discountAmount)}</Text></View>
+            <View style={s.totalRow}><Text>Giảm giá (VNĐ)</Text><Text>-{vnd(invoice.discountAmount)}</Text></View>
           ) : null}
           {shop.showTax !== false ? (
-            <View style={s.totalRow}><Text>Thuế</Text><Text>{vnd(invoice.taxAmount)}</Text></View>
+            <View style={s.totalRow}><Text>Thuế (VNĐ)</Text><Text>{vnd(invoice.taxAmount)}</Text></View>
           ) : null}
           {shop.showTip !== false ? (
-            <View style={s.totalRow}><Text>Tip</Text><Text>{vnd(invoice.tipAmount)}</Text></View>
+            <View style={s.totalRow}><Text>Tip (VNĐ)</Text><Text>{vnd(invoice.tipAmount)}</Text></View>
           ) : null}
-          <View style={s.grand}><Text>Tổng</Text><Text>{vnd(invoice.total)}</Text></View>
+          <View style={s.grand}><Text>Tổng (VNĐ)</Text><Text>{vnd(invoice.total)}</Text></View>
         </View>
 
         {invoice.note ? <Text style={[s.muted, { marginTop: 12 }]}>Ghi chú: {invoice.note}</Text> : null}
-        <Text style={[s.muted, { marginTop: 20, textAlign: "center" }]}>Cảm ơn quý khách!</Text>
+        
+        {shop.finalQrImage ? (
+          <View style={{ marginTop: 20, alignItems: "center" }}>
+            <Image src={shop.finalQrImage} style={{ width: 100, height: 100, marginBottom: 8 }} />
+            <Text style={s.muted}>Quét mã để thanh toán / liên kết</Text>
+          </View>
+        ) : (
+          <Text style={[s.muted, { marginTop: 20, textAlign: "center" }]}>Cảm ơn quý khách!</Text>
+        )}
+
       </Page>
     </Document>
   );

@@ -267,6 +267,7 @@ const AppSidebar: React.FC = () => {
                 alt="Logo"
                 width={150}
                 height={40}
+                style={{ width: "auto", height: "auto" }}
               />
               <Image
                 className="hidden dark:block"
@@ -274,6 +275,7 @@ const AppSidebar: React.FC = () => {
                 alt="Logo"
                 width={150}
                 height={40}
+                style={{ width: "auto", height: "auto" }}
               />
             </>
           ) : (
@@ -282,6 +284,7 @@ const AppSidebar: React.FC = () => {
               alt="Logo"
               width={32}
               height={32}
+              style={{ width: "auto", height: "auto" }}
             />
           )}
         </Link>

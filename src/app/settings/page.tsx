@@ -9,6 +9,7 @@ type Settings = {
   shopName: string; address: string; phone: string;
   logo: string | null; defaultTaxRate: number;
   showDiscount: boolean; showTax: boolean; showTip: boolean; showLogo: boolean;
+  enableQr: boolean; qrImage: string | null; qrText: string;
 };
 
 function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
@@ -42,6 +43,7 @@ export default function SettingsPage() {
         logo: s!.logo, defaultTaxRate: s!.defaultTaxRate,
         showDiscount: s!.showDiscount, showTax: s!.showTax,
         showTip: s!.showTip, showLogo: s!.showLogo,
+        enableQr: s!.enableQr, qrImage: s!.qrImage, qrText: s!.qrText,
       }),
     });
     if (res.ok) { setSaved(true); setTimeout(() => setSaved(false), 2500); }
@@ -113,6 +115,52 @@ export default function SettingsPage() {
             </div>
 
           </ComponentCard>
+
+          <div className="mt-6">
+            <ComponentCard title="Mã QR Thanh Toán / Liên Kết" desc="Cài đặt mã QR hiển thị trên hoá đơn PDF">
+              <div className="divide-y divide-gray-100 dark:divide-gray-800">
+                <Toggle label="Bật hiển thị mã QR trên PDF" checked={!!s.enableQr} onChange={(v) => setS({ ...s, enableQr: v })} />
+              </div>
+              
+              {s.enableQr && (
+                <div className="mt-4 flex flex-col gap-4">
+                  <div>
+                    <Label>Ảnh QR (Ưu tiên)</Label>
+                    <div className="flex flex-wrap items-center gap-4 mt-1">
+                      <input
+                        type="file"
+                        accept="image/*"
+                        onChange={(e) => {
+                          const file = e.target.files?.[0];
+                          if (!file) return;
+                          const reader = new FileReader();
+                          reader.onload = () => setS({ ...s, qrImage: reader.result as string });
+                          reader.readAsDataURL(file);
+                        }}
+                        className="max-w-full text-sm text-gray-500 file:mr-4 file:rounded-lg file:border-0 file:bg-brand-500 file:px-4 file:py-2.5 file:text-sm file:font-medium file:text-white hover:file:bg-brand-600 dark:text-gray-400"
+                      />
+                      {s.qrImage && (
+                        // eslint-disable-next-line @next/next/no-img-element
+                        <img src={s.qrImage} alt="QR" className="h-16 rounded-lg border border-gray-200 dark:border-gray-800" />
+                      )}
+                      {s.qrImage && (
+                        <Button variant="outline" size="sm" onClick={() => setS({ ...s, qrImage: null })}>Xoá ảnh</Button>
+                      )}
+                    </div>
+                  </div>
+                  <div>
+                    <Label htmlFor="qrText">Nội dung mã QR (Nếu không có ảnh QR, hệ thống sẽ tự tạo từ nội dung này)</Label>
+                    <TextInput
+                      id="qrText"
+                      value={s.qrText || ""}
+                      onChange={(e) => setS({ ...s, qrText: e.target.value })}
+                      placeholder="VD: STK ngân hàng, đường link..."
+                    />
+                  </div>
+                </div>
+              )}
+            </ComponentCard>
+          </div>
 
           <div className="mt-6">
             <ComponentCard title="Hiển thị trên hóa đơn PDF" desc="Bật/tắt các mục hiển thị khi xuất PDF">

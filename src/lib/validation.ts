@@ -23,6 +23,9 @@ export const settingsInput = z.object({
   showTax: z.boolean().optional(),
   showTip: z.boolean().optional(),
   showLogo: z.boolean().optional(),
+  enableQr: z.boolean().optional(),
+  qrImage: z.string().nullable().optional(),
+  qrText: z.string().optional(),
 });
 
 export const invoiceInput = z.object({

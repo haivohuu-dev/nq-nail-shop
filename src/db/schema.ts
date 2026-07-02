@@ -30,6 +30,9 @@ export const settings = sqliteTable("settings", {
   showTax: integer("show_tax", { mode: "boolean" }).notNull().default(true),
   showTip: integer("show_tip", { mode: "boolean" }).notNull().default(true),
   showLogo: integer("show_logo", { mode: "boolean" }).notNull().default(true),
+  enableQr: integer("enable_qr", { mode: "boolean" }).notNull().default(false),
+  qrImage: text("qr_image"),
+  qrText: text("qr_text").notNull().default(""),
 });
 
 export const categories = sqliteTable("categories", {

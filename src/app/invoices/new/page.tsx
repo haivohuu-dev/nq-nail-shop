@@ -167,7 +167,7 @@ export default function NewInvoicePage() {
                   options={[{ value: "fixed", label: "Giảm (đồng)" }, { value: "percent", label: "Giảm (%)" }]} />
               </div>
               <div>
-                <Label htmlFor="discVal">{discountType === "percent" ? "Giá trị giảm (%)" : "Giá trị giảm (₫)"}</Label>
+                <Label htmlFor="discVal">{discountType === "percent" ? "Giá trị giảm (%)" : "Giá trị giảm (VNĐ)"}</Label>
                 {discountType === "percent" ? (
                   <TextInput id="discVal" type="number" min={0} max={100} value={discountValue}
                     onChange={(e) => setDiscountValue(Number(e.target.value))} />
@@ -182,7 +182,7 @@ export default function NewInvoicePage() {
                   onChange={(e) => setTaxRate(Number(e.target.value))} />
               </div>
               <div>
-                <Label htmlFor="tip">Tip (₫)</Label>
+                <Label htmlFor="tip">Tip (VNĐ)</Label>
                 <MoneyInput id="tip" placeholder="0" value={tipAmount}
                   onValueChange={setTipAmount} />
               </div>
@@ -196,11 +196,11 @@ export default function NewInvoicePage() {
 
             {/* Tổng kết */}
             <div className="space-y-2 border-t border-gray-200 pt-4 text-sm dark:border-gray-800">
-              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Tạm tính</span><span>{formatVND(calc.subtotal)}</span></div>
-              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Giảm giá</span><span>-{formatVND(calc.discountAmount)}</span></div>
-              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Thuế</span><span>{formatVND(calc.taxAmount)}</span></div>
-              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Tip</span><span>{formatVND(tipAmount)}</span></div>
-              <div className="flex justify-between text-lg font-bold text-gray-800 dark:text-white/90"><span>Tổng</span><span>{formatVND(calc.total)}</span></div>
+              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Tạm tính (VNĐ)</span><span>{formatVND(calc.subtotal)}</span></div>
+              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Giảm giá (VNĐ)</span><span>-{formatVND(calc.discountAmount)}</span></div>
+              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Thuế (VNĐ)</span><span>{formatVND(calc.taxAmount)}</span></div>
+              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Tip (VNĐ)</span><span>{formatVND(tipAmount)}</span></div>
+              <div className="flex justify-between text-lg font-bold text-gray-800 dark:text-white/90"><span>Tổng (VNĐ)</span><span>{formatVND(calc.total)}</span></div>
             </div>
 
             <Button onClick={save} disabled={saving} className="w-full">

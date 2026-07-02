@@ -136,7 +136,7 @@ export default function ServicesPage() {
                 onChange={(e) => setForm({ ...form, name: e.target.value })} />
             </div>
             <div>
-              <Label htmlFor="svcPrice">Giá (₫)</Label>
+              <Label htmlFor="svcPrice">Giá (VNĐ)</Label>
               <MoneyInput id="svcPrice" placeholder="0" value={form.price}
                 onValueChange={(n) => setForm({ ...form, price: n })} />
             </div>
@@ -188,7 +188,7 @@ export default function ServicesPage() {
                   <thead>
                     <tr className="border-b border-gray-200 dark:border-gray-800">
                       <th className="px-4 py-3 text-left text-theme-xs font-medium text-gray-700 dark:text-gray-400">Dịch vụ</th>
-                      <th className="px-4 py-3 text-right text-theme-xs font-medium text-gray-700 dark:text-gray-400">Giá</th>
+                      <th className="px-4 py-3 text-right text-theme-xs font-medium text-gray-700 dark:text-gray-400">Giá (VNĐ)</th>
                       <th className="px-4 py-3 text-right text-theme-xs font-medium text-gray-700 dark:text-gray-400"></th>
                     </tr>
                   </thead>
@@ -260,7 +260,7 @@ export default function ServicesPage() {
                         <td className="px-2 py-3 sm:px-4">
                           <MoneyInput
                             className="text-right"
-                            placeholder="Giá"
+                            placeholder="Giá (VNĐ)"
                             value={addSvc.price}
                             onValueChange={(n) => setAddSvc({ ...addSvc, price: n })}
                             onKeyDown={(e) => { if (e.key === "Enter") saveNewService(); if (e.key === "Escape") setAddSvc(null); }}

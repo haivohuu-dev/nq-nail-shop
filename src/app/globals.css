@@ -187,8 +187,11 @@
   [role="button"]:not(:disabled) {
     cursor: pointer;
   }
+  html {
+    @apply overflow-x-hidden max-w-full;
+  }
   body {
-    @apply relative font-normal font-outfit z-1 bg-gray-50;
+    @apply relative font-normal font-outfit z-1 bg-gray-50 overflow-x-hidden max-w-full;
   }
 }
 

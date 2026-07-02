@@ -1,4 +1,5 @@
 import { renderToBuffer } from "@react-pdf/renderer";
+import QRCode from "qrcode";
 import { db, invoices, invoiceItems, settings } from "@/db";
 import { eq } from "drizzle-orm";
 import { InvoiceDocument } from "@/pdf/InvoiceDocument";
@@ -12,9 +13,24 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
   const items = await db.select().from(invoiceItems).where(eq(invoiceItems.invoiceId, invoice.id));
   const [shop] = await db.select().from(settings).limit(1);
 
+  let finalQrImage: string | null = null;
+  if (shop?.enableQr) {
+    if (shop.qrImage) {
+      finalQrImage = shop.qrImage;
+    } else if (shop.qrText) {
+      try {
+        finalQrImage = await QRCode.toDataURL(shop.qrText, { margin: 1 });
+      } catch (err) {
+        console.error("QR Generate error:", err);
+      }
+    }
+  }
+
+  const shopProps = shop ? { ...shop, finalQrImage } : { shopName: "", address: "", phone: "", logo: null, showDiscount: true, showTax: true, showTip: true, showLogo: true, finalQrImage: null };
+
   const buffer = await renderToBuffer(
     <InvoiceDocument
-      shop={shop ?? { shopName: "", address: "", phone: "", logo: null, showDiscount: true, showTax: true, showTip: true, showLogo: true }}
+      shop={shopProps}
       invoice={invoice}
       items={items}
     />

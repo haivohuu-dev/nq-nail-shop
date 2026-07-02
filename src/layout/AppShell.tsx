@@ -16,14 +16,14 @@ export default function AppShell({ children }: { children: React.ReactNode }) {
     : "lg:ml-[90px]";
 
   return (
-    <div className="min-h-screen xl:flex">
+    <div className="min-h-screen w-full max-w-full overflow-x-hidden xl:flex">
       <AppSidebar />
       <Backdrop />
       <div
         className={`flex-1 min-w-0 transition-all duration-300 ease-in-out ${mainContentMargin}`}
       >
         <AppHeader />
-        <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6">
+        <div className="p-4 mx-auto max-w-(--breakpoint-2xl) md:p-6 w-full max-w-full overflow-x-hidden">
           {children}
         </div>
       </div>

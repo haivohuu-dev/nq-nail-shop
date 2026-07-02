@@ -194,11 +194,11 @@ export default function InvoiceList({ invoices }: { invoices: InvoiceRow[] }) {
     <div className="w-full max-w-full overflow-x-hidden">
       {/* Tổng quan */}
       <div className="mb-6 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 dark:border-gray-800 dark:bg-white/[0.03]">
-        <div className="mb-6 flex items-center justify-between">
+        <div className="mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <h2 className="font-semibold text-gray-800 dark:text-white/90">Tổng quan</h2>
           </div>
-          <div>
+          <div className="w-full sm:w-auto">
             <Link
               href="/invoices/new"
               className="bg-brand-500 shadow-theme-xs hover:bg-brand-600 inline-flex items-center justify-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-white transition"
@@ -216,7 +216,7 @@ export default function InvoiceList({ invoices }: { invoices: InvoiceRow[] }) {
             <h3 className="text-3xl text-gray-800 dark:text-white/90">{stats.count}</h3>
           </div>
           <div className="border-b p-5 lg:border-b-0 dark:border-gray-800">
-            <p className="mb-1.5 text-sm text-gray-400 dark:text-gray-500">Tổng doanh thu</p>
+            <p className="mb-1.5 text-sm text-gray-400 dark:text-gray-500">Tổng doanh thu (VNĐ)</p>
             <h3 className="text-3xl text-gray-800 dark:text-white/90">{formatVND(stats.revenue)}</h3>
           </div>
           <div className="border-b p-5 sm:border-r sm:border-b-0 dark:border-gray-800">
@@ -224,20 +224,20 @@ export default function InvoiceList({ invoices }: { invoices: InvoiceRow[] }) {
             <h3 className="text-3xl text-gray-800 dark:text-white/90">{stats.countToday}</h3>
           </div>
           <div className="p-5">
-            <p className="mb-1.5 text-sm text-gray-400 dark:text-gray-500">Doanh thu hôm nay</p>
+            <p className="mb-1.5 text-sm text-gray-400 dark:text-gray-500">Doanh thu hôm nay (VNĐ)</p>
             <h3 className="text-3xl text-gray-800 dark:text-white/90">{formatVND(stats.revenueToday)}</h3>
           </div>
         </div>
       </div>
 
       {/* Bảng */}
-      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03]">
+      <div className="overflow-hidden rounded-xl border border-gray-200 bg-white dark:border-gray-800 dark:bg-white/[0.03] w-full max-w-full">
         <div className="flex flex-col gap-4 border-b border-gray-200 px-5 py-4 sm:flex-row sm:items-center sm:justify-between dark:border-gray-800">
           <div>
             <h3 className="text-lg font-semibold text-gray-800 dark:text-white/90">Hóa đơn</h3>
             <p className="text-sm text-gray-500 dark:text-gray-400">Danh sách hóa đơn gần đây</p>
           </div>
-          <div className="flex items-center gap-3.5">
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3.5 w-full sm:w-auto">
             {selected.length > 0 && (
               <button
                 onClick={deleteSelected}
@@ -247,7 +247,7 @@ export default function InvoiceList({ invoices }: { invoices: InvoiceRow[] }) {
                 Xóa ({selected.length})
               </button>
             )}
-            <div className="relative">
+            <div className="relative w-full sm:w-auto">
               <span className="absolute top-1/2 left-4 -translate-y-1/2 text-gray-500 dark:text-gray-400">
                 <svg className="fill-current" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path fillRule="evenodd" clipRule="evenodd" d="M3.04199 9.37363C3.04199 5.87693 5.87735 3.04199 9.37533 3.04199C12.8733 3.04199 15.7087 5.87693 15.7087 9.37363C15.7087 12.8703 12.8733 15.7053 9.37533 15.7053C5.87735 15.7053 3.04199 12.8703 3.04199 9.37363ZM9.37533 1.54199C5.04926 1.54199 1.54199 5.04817 1.54199 9.37363C1.54199 13.6991 5.04926 17.2053 9.37533 17.2053C11.2676 17.2053 13.0032 16.5344 14.3572 15.4176L17.1773 18.238C17.4702 18.5309 17.945 18.5309 18.2379 18.238C18.5308 17.9451 18.5309 17.4703 18.238 17.1773L15.4182 14.3573C16.5367 13.0033 17.2087 11.2669 17.2087 9.37363C17.2087 5.04817 13.7014 1.54199 9.37533 1.54199Z" fill=""></path>
@@ -264,7 +264,7 @@ export default function InvoiceList({ invoices }: { invoices: InvoiceRow[] }) {
           </div>
         </div>
 
-        <div className="custom-scrollbar overflow-x-auto">
+        <div className="custom-scrollbar overflow-x-auto w-full">
           <table className="w-full table-auto">
             <thead>
               <tr className="border-b border-gray-200 dark:border-gray-800">
@@ -305,7 +305,7 @@ export default function InvoiceList({ invoices }: { invoices: InvoiceRow[] }) {
                 </th>
                 <th className="cursor-pointer p-4 text-left" onClick={() => sort("total")}>
                   <div className="flex items-center gap-2">
-                    <p className="text-theme-xs font-medium text-gray-700 dark:text-gray-400">Tổng tiền</p>
+                    <p className="text-theme-xs font-medium text-gray-700 dark:text-gray-400">Tổng tiền (VNĐ)</p>
                     <SortIcon field="total" sortBy={sortBy} sortDirection={sortDirection} />
                   </div>
                 </th>
@@ -345,7 +345,7 @@ export default function InvoiceList({ invoices }: { invoices: InvoiceRow[] }) {
                     <p className="text-sm text-gray-700 dark:text-gray-400">{inv.customerPhone || "—"}</p>
                   </td>
                   <td className="p-4 whitespace-nowrap">
-                    <p className="text-sm text-gray-700 dark:text-gray-400">{formatDate(inv.createdAt)}</p>
+                    <p suppressHydrationWarning className="text-sm text-gray-700 dark:text-gray-400">{formatDate(inv.createdAt)}</p>
                   </td>
                   <td className="p-4 whitespace-nowrap">
                     <p className="text-sm font-medium text-gray-700 dark:text-gray-400">{formatVND(inv.total)}</p>

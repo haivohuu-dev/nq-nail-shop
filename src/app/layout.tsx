@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { SidebarProvider } from "@/context/SidebarContext";
@@ -12,6 +12,14 @@ export const metadata: Metadata = {
   description: "Quản lý hóa đơn tiệm nail",
 };
 
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+};
+
+
 export default function RootLayout({
   children,
 }: {
@@ -20,11 +28,13 @@ export default function RootLayout({
   return (
     <html lang="vi">
       <body className={`${inter.className} dark:bg-gray-900`}>
-        <ThemeProvider>
-          <SidebarProvider>
-            <ConditionalShell>{children}</ConditionalShell>
-          </SidebarProvider>
-        </ThemeProvider>
+        <div className="flex flex-col min-h-screen overflow-x-hidden w-full relative">
+          <ThemeProvider>
+            <SidebarProvider>
+              <ConditionalShell>{children}</ConditionalShell>
+            </SidebarProvider>
+          </ThemeProvider>
+        </div>
       </body>
     </html>
   );
