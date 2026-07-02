@@ -14,7 +14,7 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
             <GridShape />
             <div className="flex max-w-xs flex-col items-center">
               <Link href="/" className="mb-4 block">
-                <Image width={231} height={48} src="/images/logo/auth-logo.svg" alt="Logo" style={{ width: "auto", height: "auto" }} priority />
+                <h1 className="text-4xl font-bold text-white">NQ Nail Manager</h1>
               </Link>
               <p className="text-center text-gray-400 dark:text-white/60">
                 Hệ thống quản lý hóa đơn tiệm nail
