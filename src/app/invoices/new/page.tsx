@@ -3,6 +3,10 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { computeInvoice } from "@/lib/calc";
 import { formatVND } from "@/lib/format";
+import PageBreadcrumb from "@/components/common/PageBreadCrumb";
+import ComponentCard from "@/components/common/ComponentCard";
+import Button from "@/components/ui/button/Button";
+import { Label, TextInput, TextArea, SelectMenu, MoneyInput } from "@/components/form/Field";
 
 type Category = { id: number; name: string };
 type Service = { id: number; categoryId: number; name: string; price: number; active: boolean };
@@ -61,66 +65,149 @@ export default function NewInvoicePage() {
   }
 
   return (
-    <div className="grid gap-6 md:grid-cols-2">
-      <div className="space-y-4">
-        <h1 className="text-2xl font-bold">Tạo hóa đơn</h1>
-        {cats.map((c) => (
-          <div key={c.id}>
-            <h3 className="font-semibold">{c.name}</h3>
-            <div className="flex flex-wrap gap-2">
-              {svcs.filter((s) => s.categoryId === c.id && s.active).map((s) => (
-                <button key={s.id} onClick={() => addToCart(s)} className="rounded border px-3 py-1 hover:bg-blue-50">
-                  {s.name} · {formatVND(s.price)}
-                </button>
-              ))}
+    <div>
+      <PageBreadcrumb pageTitle="Tạo hóa đơn" />
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-5">
+        {/* Chọn dịch vụ */}
+        <div className="lg:col-span-3">
+          <ComponentCard title="Chọn dịch vụ" desc="Bấm để thêm dịch vụ vào hóa đơn">
+            {!cats.length && <p className="text-sm text-gray-400">Đang tải…</p>}
+            {cats.map((c) => {
+              const list = svcs.filter((s) => s.categoryId === c.id && s.active);
+              if (!list.length) return null;
+              return (
+                <div key={c.id}>
+                  <h4 className="mb-3 text-sm font-medium text-gray-800 dark:text-white/90">{c.name}</h4>
+                  <div className="flex flex-wrap gap-2">
+                    {list.map((s) => {
+                      const line = cart.find((l) => l.serviceId === s.id);
+                      const selected = !!line;
+                      return (
+                        <button
+                          key={s.id}
+                          onClick={() => addToCart(s)}
+                          className={`inline-flex items-center gap-2 rounded-lg border px-3.5 py-2 text-sm font-medium shadow-theme-xs transition ${
+                            selected
+                              ? "border-brand-500 bg-brand-500 text-white hover:bg-brand-600"
+                              : "border-gray-300 bg-white text-gray-700 hover:border-brand-300 hover:bg-brand-50 hover:text-brand-600 dark:border-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:hover:bg-white/[0.03]"
+                          }`}
+                        >
+                          {selected && (
+                            <span className="flex h-5 min-w-5 items-center justify-center rounded-full bg-white/25 px-1 text-xs">{line.qty}</span>
+                          )}
+                          <span>{s.name}</span>
+                          <span className={selected ? "text-white/70" : "text-gray-400 dark:text-gray-500"}>{formatVND(s.price)}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+              );
+            })}
+          </ComponentCard>
+        </div>
+
+        {/* Tóm tắt hóa đơn */}
+        <div className="lg:col-span-2">
+          <ComponentCard title="Hóa đơn">
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <Label htmlFor="cName">Tên khách</Label>
+                <TextInput id="cName" placeholder="Tên khách" value={customerName}
+                  onChange={(e) => setCustomerName(e.target.value)} />
+              </div>
+              <div>
+                <Label htmlFor="cPhone">SĐT khách</Label>
+                <TextInput id="cPhone" placeholder="SĐT khách" value={customerPhone}
+                  onChange={(e) => setCustomerPhone(e.target.value)} />
+              </div>
             </div>
-          </div>
-        ))}
-      </div>
 
-      <div className="space-y-3 rounded border bg-white p-4">
-        <input className="w-full rounded border p-2" placeholder="Tên khách" value={customerName} onChange={(e) => setCustomerName(e.target.value)} />
-        <input className="w-full rounded border p-2" placeholder="SĐT khách" value={customerPhone} onChange={(e) => setCustomerPhone(e.target.value)} />
+            {/* Giỏ dịch vụ */}
+            <div className="overflow-hidden rounded-xl border border-gray-200 dark:border-gray-800">
+              <table className="w-full">
+                <thead>
+                  <tr className="border-b border-gray-200 dark:border-gray-800">
+                    <th className="px-3 py-2.5 text-center text-theme-xs font-medium text-gray-700 dark:text-gray-400 w-10">#</th>
+                    <th className="px-3 py-2.5 text-left text-theme-xs font-medium text-gray-700 dark:text-gray-400">Dịch vụ</th>
+                    <th className="px-3 py-2.5 text-center text-theme-xs font-medium text-gray-700 dark:text-gray-400">SL</th>
+                    <th className="px-3 py-2.5 text-right text-theme-xs font-medium text-gray-700 dark:text-gray-400">Thành tiền</th>
+                    <th className="px-3 py-2.5"></th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-gray-200 dark:divide-gray-800">
+                  {cart.map((l, i) => (
+                    <tr key={i}>
+                      <td className="px-3 py-2 text-center text-sm text-gray-500 dark:text-gray-500">{i + 1}</td>
+                      <td className="px-3 py-2 text-sm text-gray-700 dark:text-gray-400">{l.nameSnapshot}</td>
+                      <td className="px-3 py-2 text-center">
+                        <input type="number" min={1} value={l.qty}
+                          onChange={(e) => setQty(i, Number(e.target.value))}
+                          className="h-9 w-16 rounded-lg border border-gray-300 bg-transparent px-2 text-center text-sm text-gray-800 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
+                      </td>
+                      <td className="px-3 py-2 text-right text-sm font-medium text-gray-700 dark:text-gray-400">{formatVND(l.priceSnapshot * l.qty)}</td>
+                      <td className="px-3 py-2 text-right">
+                        <button onClick={() => removeLine(i)} className="text-error-500 hover:text-error-600" aria-label="Xóa dòng">×</button>
+                      </td>
+                    </tr>
+                  ))}
+                  {!cart.length && (
+                    <tr><td colSpan={5} className="px-3 py-4 text-center text-sm text-gray-400">Chưa chọn dịch vụ</td></tr>
+                  )}
+                </tbody>
+              </table>
+            </div>
 
-        <table className="w-full text-sm">
-          <tbody>
-            {cart.map((l, i) => (
-              <tr key={i} className="border-b">
-                <td>{l.nameSnapshot}</td>
-                <td><input type="number" className="w-14 rounded border p-1" value={l.qty} onChange={(e) => setQty(i, Number(e.target.value))} /></td>
-                <td className="text-right">{formatVND(l.priceSnapshot * l.qty)}</td>
-                <td><button onClick={() => removeLine(i)} className="text-red-600">×</button></td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+            {/* Giảm giá / thuế / tip */}
+            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+              <div>
+                <Label htmlFor="discType">Loại giảm giá</Label>
+                <SelectMenu id="discType" value={discountType}
+                  onChange={(v) => { setDiscountType(v as "percent" | "fixed"); setDiscountValue(0); }}
+                  options={[{ value: "fixed", label: "Giảm (đồng)" }, { value: "percent", label: "Giảm (%)" }]} />
+              </div>
+              <div>
+                <Label htmlFor="discVal">{discountType === "percent" ? "Giá trị giảm (%)" : "Giá trị giảm (₫)"}</Label>
+                {discountType === "percent" ? (
+                  <TextInput id="discVal" type="number" min={0} max={100} value={discountValue}
+                    onChange={(e) => setDiscountValue(Number(e.target.value))} />
+                ) : (
+                  <MoneyInput id="discVal" placeholder="0" value={discountValue}
+                    onValueChange={setDiscountValue} />
+                )}
+              </div>
+              <div>
+                <Label htmlFor="tax">Thuế (%)</Label>
+                <TextInput id="tax" type="number" min={0} max={100} value={taxRate}
+                  onChange={(e) => setTaxRate(Number(e.target.value))} />
+              </div>
+              <div>
+                <Label htmlFor="tip">Tip (₫)</Label>
+                <MoneyInput id="tip" placeholder="0" value={tipAmount}
+                  onValueChange={setTipAmount} />
+              </div>
+            </div>
 
-        <div className="flex gap-2">
-          <select className="rounded border p-2" value={discountType} onChange={(e) => setDiscountType(e.target.value as "percent" | "fixed")}>
-            <option value="fixed">Giảm (đồng)</option>
-            <option value="percent">Giảm (%, phần nghìn)</option>
-          </select>
-          <input type="number" className="w-full rounded border p-2" placeholder="Giá trị giảm" value={discountValue} onChange={(e) => setDiscountValue(Number(e.target.value))} />
+            <div>
+              <Label htmlFor="note">Ghi chú</Label>
+              <TextArea id="note" placeholder="Ghi chú" value={note}
+                onChange={(e) => setNote(e.target.value)} />
+            </div>
+
+            {/* Tổng kết */}
+            <div className="space-y-2 border-t border-gray-200 pt-4 text-sm dark:border-gray-800">
+              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Tạm tính</span><span>{formatVND(calc.subtotal)}</span></div>
+              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Giảm giá</span><span>-{formatVND(calc.discountAmount)}</span></div>
+              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Thuế</span><span>{formatVND(calc.taxAmount)}</span></div>
+              <div className="flex justify-between text-gray-500 dark:text-gray-400"><span>Tip</span><span>{formatVND(tipAmount)}</span></div>
+              <div className="flex justify-between text-lg font-bold text-gray-800 dark:text-white/90"><span>Tổng</span><span>{formatVND(calc.total)}</span></div>
+            </div>
+
+            <Button onClick={save} disabled={saving} className="w-full">
+              {saving ? "Đang lưu…" : "Lưu hóa đơn"}
+            </Button>
+          </ComponentCard>
         </div>
-        <label className="block text-sm">Thuế (phần nghìn, 85=8.5%)
-          <input type="number" className="w-full rounded border p-2" value={taxRate} onChange={(e) => setTaxRate(Number(e.target.value))} />
-        </label>
-        <label className="block text-sm">Tip (đồng)
-          <input type="number" className="w-full rounded border p-2" value={tipAmount} onChange={(e) => setTipAmount(Number(e.target.value))} />
-        </label>
-        <textarea className="w-full rounded border p-2" placeholder="Ghi chú" value={note} onChange={(e) => setNote(e.target.value)} />
-
-        <div className="space-y-1 border-t pt-2 text-sm">
-          <div className="flex justify-between"><span>Tạm tính</span><span>{formatVND(calc.subtotal)}</span></div>
-          <div className="flex justify-between"><span>Giảm giá</span><span>-{formatVND(calc.discountAmount)}</span></div>
-          <div className="flex justify-between"><span>Thuế</span><span>{formatVND(calc.taxAmount)}</span></div>
-          <div className="flex justify-between"><span>Tip</span><span>{formatVND(tipAmount)}</span></div>
-          <div className="flex justify-between text-lg font-bold"><span>Tổng</span><span>{formatVND(calc.total)}</span></div>
-        </div>
-
-        <button onClick={save} disabled={saving} className="w-full rounded bg-green-600 py-2 text-white disabled:opacity-50">
-          {saving ? "Đang lưu…" : "Lưu hóa đơn"}
-        </button>
       </div>
     </div>
   );

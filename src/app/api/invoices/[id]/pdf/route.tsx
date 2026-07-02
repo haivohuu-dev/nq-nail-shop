@@ -14,7 +14,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
 
   const buffer = await renderToBuffer(
     <InvoiceDocument
-      shop={shop ?? { shopName: "", address: "", phone: "", logo: null }}
+      shop={shop ?? { shopName: "", address: "", phone: "", logo: null, showDiscount: true, showTax: true, showTip: true, showLogo: true }}
       invoice={invoice}
       items={items}
     />

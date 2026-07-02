@@ -19,6 +19,10 @@ export const settingsInput = z.object({
   phone: z.string(),
   logo: z.string().nullable(),
   defaultTaxRate: z.number().int().min(0),
+  showDiscount: z.boolean().optional(),
+  showTax: z.boolean().optional(),
+  showTip: z.boolean().optional(),
+  showLogo: z.boolean().optional(),
 });
 
 export const invoiceInput = z.object({

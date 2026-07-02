@@ -1,20 +1,30 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { Inter } from "next/font/google";
 import "./globals.css";
+import { SidebarProvider } from "@/context/SidebarContext";
+import { ThemeProvider } from "@/context/ThemeContext";
+import ConditionalShell from "@/layout/ConditionalShell";
 
-export const metadata: Metadata = { title: "Nail Salon", description: "Quản lý hóa đơn tiệm nail" };
+const inter = Inter({ subsets: ["latin", "vietnamese"] });
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export const metadata: Metadata = {
+  title: "Nail Salon",
+  description: "Quản lý hóa đơn tiệm nail",
+};
+
+export default function RootLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <html lang="vi">
-      <body className="min-h-screen bg-gray-50 text-gray-900">
-        <nav className="flex gap-4 border-b bg-white px-6 py-3 text-sm font-medium">
-          <Link href="/invoices">Hóa đơn</Link>
-          <Link href="/invoices/new">Tạo hóa đơn</Link>
-          <Link href="/services">Dịch vụ</Link>
-          <Link href="/settings">Cài đặt</Link>
-        </nav>
-        <main className="mx-auto max-w-5xl p-6">{children}</main>
+      <body className={`${inter.className} dark:bg-gray-900`}>
+        <ThemeProvider>
+          <SidebarProvider>
+            <ConditionalShell>{children}</ConditionalShell>
+          </SidebarProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
