@@ -3,7 +3,7 @@ import type { NextRequest } from "next/server";
 
 // Chặn mọi route: chưa có cookie token -> đẩy về /signin.
 // Bỏ qua: /signin, /api/auth/*, tài nguyên tĩnh (đã loại ở matcher bên dưới).
-export function middleware(req: NextRequest) {
+export function proxy(req: NextRequest) {
   const token = req.cookies.get("token")?.value;
   if (token) return NextResponse.next();
 
