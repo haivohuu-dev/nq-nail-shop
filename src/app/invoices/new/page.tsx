@@ -42,7 +42,7 @@ export default function NewInvoicePage() {
     });
   }
   function setQty(i: number, qty: number) {
-    setCart((prev) => prev.map((l, idx) => idx === i ? { ...l, qty: Math.max(1, qty) } : l));
+    setCart((prev) => prev.map((l, idx) => idx === i ? { ...l, qty: Math.max(0, qty) } : l));
   }
   function removeLine(i: number) { setCart((prev) => prev.filter((_, idx) => idx !== i)); }
 
@@ -56,7 +56,7 @@ export default function NewInvoicePage() {
     setSaving(true);
     const res = await fetch("/api/invoices", {
       method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ customerName, customerPhone, discountType, discountValue, taxRate, tipAmount, note, items: cart }),
+      body: JSON.stringify({ customerName, customerPhone, discountType, discountValue, taxRate, tipAmount, note, items: cart.map((l) => ({ ...l, qty: Math.max(1, l.qty) })) }),
     });
     setSaving(false);
     if (!res.ok) { const e = await res.json(); alert(JSON.stringify(e.error)); return; }
@@ -141,8 +141,9 @@ export default function NewInvoicePage() {
                       <td className="px-3 py-2 text-center text-sm text-gray-500 dark:text-gray-500">{i + 1}</td>
                       <td className="px-3 py-2 text-sm text-gray-700 dark:text-gray-400">{l.nameSnapshot}</td>
                       <td className="px-3 py-2 text-center">
-                        <input type="number" min={1} value={l.qty}
-                          onChange={(e) => setQty(i, Number(e.target.value))}
+                        <input type="number" min={1} value={l.qty === 0 ? "" : l.qty}
+                          onChange={(e) => setQty(i, e.target.value === "" ? 0 : Number(e.target.value))}
+                          onBlur={(e) => { if (e.target.value === "" || Number(e.target.value) < 1) setQty(i, 1); }}
                           className="h-9 w-16 rounded-lg border border-gray-300 bg-transparent px-2 text-center text-sm text-gray-800 focus:border-brand-300 focus:outline-hidden focus:ring-3 focus:ring-brand-500/10 dark:border-gray-700 dark:bg-gray-900 dark:text-white/90" />
                       </td>
                       <td className="px-3 py-2 text-right text-sm font-medium text-gray-700 dark:text-gray-400">{formatVND(l.priceSnapshot * l.qty)}</td>
