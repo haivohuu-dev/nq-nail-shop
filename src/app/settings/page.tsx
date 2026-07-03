@@ -4,12 +4,14 @@ import PageBreadcrumb from "@/components/common/PageBreadCrumb";
 import ComponentCard from "@/components/common/ComponentCard";
 import Button from "@/components/ui/button/Button";
 import { Label, TextInput } from "@/components/form/Field";
+import SignaturePad from "@/components/form/SignaturePad";
 
 type Settings = {
   shopName: string; address: string; phone: string;
   logo: string | null; defaultTaxRate: number;
   showDiscount: boolean; showTax: boolean; showTip: boolean; showLogo: boolean;
   enableQr: boolean; qrImage: string | null; qrText: string;
+  showSignature: boolean; signature: string | null;
 };
 
 function Toggle({ label, checked, onChange }: { label: string; checked: boolean; onChange: (v: boolean) => void }) {
@@ -44,6 +46,7 @@ export default function SettingsPage() {
         showDiscount: s!.showDiscount, showTax: s!.showTax,
         showTip: s!.showTip, showLogo: s!.showLogo,
         enableQr: s!.enableQr, qrImage: s!.qrImage, qrText: s!.qrText,
+        showSignature: s!.showSignature, signature: s!.signature,
       }),
     });
     if (res.ok) { setSaved(true); setTimeout(() => setSaved(false), 2500); }
@@ -170,6 +173,20 @@ export default function SettingsPage() {
                 <Toggle label="Thuế" checked={s.showTax} onChange={(v) => setS({ ...s, showTax: v })} />
                 <Toggle label="Tip" checked={s.showTip} onChange={(v) => setS({ ...s, showTip: v })} />
               </div>
+            </ComponentCard>
+          </div>
+
+          <div className="mt-6">
+            <ComponentCard title="Chữ ký" desc="Chữ ký hiển thị góc phải cuối hoá đơn PDF">
+              <div className="divide-y divide-gray-100 dark:divide-gray-800">
+                <Toggle label="Bật hiển thị chữ ký trên PDF" checked={!!s.showSignature} onChange={(v) => setS({ ...s, showSignature: v })} />
+              </div>
+              {s.showSignature && (
+                <div className="mt-4">
+                  <Label>Ký tại đây (dùng chuột hoặc chạm để ký)</Label>
+                  <SignaturePad value={s.signature} onChange={(dataUrl) => setS({ ...s, signature: dataUrl })} />
+                </div>
+              )}
             </ComponentCard>
           </div>
 
