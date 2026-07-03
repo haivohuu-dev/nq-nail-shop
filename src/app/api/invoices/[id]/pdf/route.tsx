@@ -26,7 +26,7 @@ export async function GET(_req: Request, { params }: { params: Promise<{ id: str
     }
   }
 
-  const shopProps = shop ? { ...shop, finalQrImage } : { shopName: "", address: "", phone: "", logo: null, showDiscount: true, showTax: true, showTip: true, showLogo: true, finalQrImage: null };
+  const shopProps = shop ? { ...shop, finalQrImage } : { shopName: "", address: "", phone: "", logo: null, showDiscount: true, showTax: true, showTip: true, showLogo: true, showSignature: false, signature: null, finalQrImage: null };
 
   const buffer = await renderToBuffer(
     <InvoiceDocument

@@ -26,12 +26,15 @@ const s = StyleSheet.create({
   totalRow: { flexDirection: "row", justifyContent: "space-between", paddingVertical: 2 },
   grand: { flexDirection: "row", justifyContent: "space-between", paddingVertical: 4, borderTop: "1px solid #333", fontWeight: "bold", fontSize: 13 },
   logo: { height: 48, marginBottom: 6 },
+  signature: { marginTop: 24, marginLeft: "auto", width: 160, alignItems: "flex-end" },
+  signatureImg: { width: 140, height: 60, objectFit: "contain" },
 });
 
 type Shop = {
   shopName: string; address: string; phone: string; logo: string | null;
   showDiscount?: boolean; showTax?: boolean; showTip?: boolean; showLogo?: boolean;
   finalQrImage?: string | null;
+  showSignature?: boolean; signature?: string | null;
 };
 type Invoice = {
   invoiceNumber: string; customerName: string; customerPhone: string; createdAt: string;
@@ -89,7 +92,14 @@ export function InvoiceDocument({ shop, invoice, items }: { shop: Shop; invoice:
         </View>
 
         {invoice.note ? <Text style={[s.muted, { marginTop: 12 }]}>Ghi chú: {invoice.note}</Text> : null}
-        
+
+        {shop.showSignature && shop.signature ? (
+          <View style={s.signature}>
+            <Text style={s.muted}>Chữ ký</Text>
+            <Image src={shop.signature} style={s.signatureImg} />
+          </View>
+        ) : null}
+
         {shop.finalQrImage ? (
           <View style={{ marginTop: 20, alignItems: "center" }}>
             <Image src={shop.finalQrImage} style={{ width: 100, height: 100, marginBottom: 8 }} />
