@@ -90,7 +90,7 @@ export default function SignaturePad({
         style={{ aspectRatio: `${CANVAS_W} / ${CANVAS_H}`, cursor: "crosshair" }}
       />
       <div>
-        <Button variant="outline" size="sm" onClick={clear}>
+        <Button type="button" variant="outline" size="sm" onClick={clear}>
           Xoá chữ ký
         </Button>
       </div>
