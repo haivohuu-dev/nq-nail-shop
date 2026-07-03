@@ -26,6 +26,8 @@ export const settingsInput = z.object({
   enableQr: z.boolean().optional(),
   qrImage: z.string().nullable().optional(),
   qrText: z.string().optional(),
+  showSignature: z.boolean().optional(),
+  signature: z.string().nullable().optional(),
 });
 
 export const invoiceInput = z.object({

@@ -33,6 +33,8 @@ export const settings = sqliteTable("settings", {
   enableQr: integer("enable_qr", { mode: "boolean" }).notNull().default(false),
   qrImage: text("qr_image"),
   qrText: text("qr_text").notNull().default(""),
+  showSignature: integer("show_signature", { mode: "boolean" }).notNull().default(false),
+  signature: text("signature"), // base64 PNG data URL, nullable
 });
 
 export const categories = sqliteTable("categories", {
