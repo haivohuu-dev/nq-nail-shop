@@ -52,7 +52,7 @@ export default function SignaturePad({
     if (!drawing.current) return;
     const ctx = canvasRef.current!.getContext("2d")!;
     const p = pos(e);
-    ctx.strokeStyle = "#111";
+    ctx.strokeStyle = "#dc2626";
     ctx.lineWidth = 2.5;
     ctx.lineCap = "round";
     ctx.lineJoin = "round";

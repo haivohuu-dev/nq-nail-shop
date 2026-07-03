@@ -26,7 +26,7 @@ const s = StyleSheet.create({
   totalRow: { flexDirection: "row", justifyContent: "space-between", paddingVertical: 2 },
   grand: { flexDirection: "row", justifyContent: "space-between", paddingVertical: 4, borderTop: "1px solid #333", fontWeight: "bold", fontSize: 13 },
   logo: { height: 48, marginBottom: 6 },
-  signature: { marginTop: 24, marginLeft: "auto", width: 160, alignItems: "flex-end" },
+  signature: { marginTop: 24, marginLeft: "auto", marginRight: 24, width: 160, alignItems: "center" },
   signatureImg: { width: 140, height: 60, objectFit: "contain" },
 });
 
@@ -95,7 +95,7 @@ export function InvoiceDocument({ shop, invoice, items }: { shop: Shop; invoice:
 
         {shop.showSignature && shop.signature ? (
           <View style={s.signature}>
-            <Text style={s.muted}>Chữ ký</Text>
+            <Text style={[s.muted, { color: "#dc2626" }]}>Chữ ký</Text>
             <Image src={shop.signature} style={s.signatureImg} />
           </View>
         ) : null}
