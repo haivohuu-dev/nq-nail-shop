@@ -136,6 +136,12 @@ export default function InvoiceList({ invoices }: { invoices: InvoiceRow[] }) {
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / itemsPerPage));
 
+  // Sau khi xóa/lọc làm số trang giảm, kéo currentPage về trang cuối hợp lệ
+  // (nếu không, trang hiện tại vượt totalPages -> danh sách rỗng dù vẫn còn dữ liệu).
+  useEffect(() => {
+    if (currentPage > totalPages) setCurrentPage(totalPages);
+  }, [currentPage, totalPages]);
+
   const paginated = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
     return sorted.slice(start, start + itemsPerPage);

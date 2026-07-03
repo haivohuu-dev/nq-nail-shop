@@ -17,8 +17,14 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
   const { id } = use(params);
   const router = useRouter();
   const [data, setData] = useState<{ invoice: Invoice; items: Item[] } | null>(null);
+  const [notFound, setNotFound] = useState(false);
 
-  useEffect(() => { fetch(`/api/invoices/${id}`).then((r) => r.json()).then(setData); }, [id]);
+  useEffect(() => {
+    fetch(`/api/invoices/${id}`)
+      .then((r) => r.json())
+      .then((d) => { if (d?.invoice) setData(d); else setNotFound(true); })
+      .catch(() => setNotFound(true));
+  }, [id]);
 
   async function remove() {
     if (!confirm("Xóa hóa đơn này?")) return;
@@ -29,7 +35,9 @@ export default function InvoiceDetailPage({ params }: { params: Promise<{ id: st
   return (
     <div>
       <PageBreadcrumb pageTitle="Chi tiết hóa đơn" />
-      {!data ? (
+      {notFound ? (
+        <p className="text-sm text-gray-500 dark:text-gray-400">Không tìm thấy hóa đơn.</p>
+      ) : !data ? (
         <p className="text-sm text-gray-500 dark:text-gray-400">Đang tải…</p>
       ) : (
         <div className="mx-auto max-w-3xl">

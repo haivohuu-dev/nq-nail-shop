@@ -31,7 +31,11 @@ export default function NewInvoicePage() {
       fetch("/api/categories").then((r) => r.json()),
       fetch("/api/services").then((r) => r.json()),
       fetch("/api/settings").then((r) => r.json()),
-    ]).then(([c, s, st]) => { setCats(c); setSvcs(s); setTaxRate(st.defaultTaxRate ?? 0); });
+    ]).then(([c, s, st]) => {
+      setCats(Array.isArray(c) ? c : []);
+      setSvcs(Array.isArray(s) ? s : []);
+      setTaxRate(st?.defaultTaxRate ?? 0);
+    });
   }, []);
 
   function addToCart(s: Service) {

@@ -44,8 +44,10 @@ export default function ServicesPage() {
       fetch("/api/categories").then((r) => r.json()),
       fetch("/api/services").then((r) => r.json()),
     ]);
-    setCats(c); setSvcs(s);
-    if (c.length && !form.categoryId) setForm((f) => ({ ...f, categoryId: c[0].id }));
+    const cList = Array.isArray(c) ? c : [];
+    const sList = Array.isArray(s) ? s : [];
+    setCats(cList); setSvcs(sList);
+    if (cList.length && !form.categoryId) setForm((f) => ({ ...f, categoryId: cList[0].id }));
   }, [form.categoryId]);
 
   useEffect(() => { load(); }, [load]);
